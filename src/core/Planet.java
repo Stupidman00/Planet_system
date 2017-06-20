@@ -22,10 +22,36 @@ public class Planet {
         this.currentPos = new PolarPoint(startPosition, radius);
     }
 
-    public void move(int time) {
+    private double getRadius() { return radius; }
+    private int getPeriod() { return period; }
+    public PolarPoint getCurrentPos() { return currentPos; }
+
+    void move(int time) {
         double a = (2*Math.PI/period)*time + currentPos.getAngle();
         double r = radius;
         currentPos = new PolarPoint(a, r);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Planet planet = (Planet) o;
+
+        return Double.compare(planet.getRadius(), getRadius()) == 0 &&
+                getPeriod() == planet.getPeriod() && (getCurrentPos() != null ?
+                getCurrentPos().equals(planet.getCurrentPos()) : planet.getCurrentPos() == null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(getRadius());
+        result = (int) (temp ^ (temp >>> 32));
+        result = 31 * result + getPeriod();
+        result = 31 * result + (getCurrentPos() != null ? getCurrentPos().hashCode() : 0);
+        return result;
+    }
 }
