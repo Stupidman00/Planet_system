@@ -1,59 +1,63 @@
 package core;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.*;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlanetSystem {
-    private Set<Planet> planets;
-    private int step;
+    private final String sunName;
+    private final String sunDescription;
+    private final List<Planet> planets;
 
-    public PlanetSystem() {
-        this.planets = new HashSet<>();
-        this.step = 1;
-    }
+    @Data
+    @XmlRootElement(name = "planetSystem")
+    @XmlType(propOrder = {"sunName", "sunDescription", "planets"}, namespace = "PlanetSystem")
+    static public class Builder {
+        private String sunName;
+        private String sunDescription;
+        private List<Planet.Builder> planets;
 
-    public void add(Planet p) {
-        planets.add(p);
-    }
+        @XmlElement(name = "sunName")
+        public Builder setSunName(String sunName) {
+            this.sunName = sunName;
+            return this;
+        }
 
-    public void move() {
-        for (Planet p : planets) {
-            p.move(step);
+        @XmlElement(name = "sunDescription")
+        public Builder setSunDescription(String sunDescription) {
+            this.sunDescription = sunDescription;
+            return this;
+        }
+
+        @XmlElement(name = "planet")
+        public Builder setPlanets(List<Planet.Builder> planets) {
+            this.planets = planets;
+            return this;
+        }
+
+        public PlanetSystem build() {
+            List<Planet> realPlanets = new ArrayList<>();
+            for (Planet.Builder p : this.planets) {
+                realPlanets.add(p.build());
+            }
+            return new PlanetSystem(sunName, sunDescription, realPlanets);
         }
     }
 
-    public Set<Planet> getPlanets() {
-        return Collections.unmodifiableSet(planets);
+//    public static PlanetSystem createPlanetSystem(File file) {
+//
+//    }
+//
+    public void move(int timeInterval) {
+        for (Planet p: planets) {
+            p.move(timeInterval);
+        }
     }
 
-    public void setStep(int step) {
-        this.step = step;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PlanetSystem that = (PlanetSystem) o;
-
-        return step == that.step && (getPlanets() != null ?
-                getPlanets().equals(that.getPlanets()) : that.getPlanets() == null);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getPlanets() != null ? getPlanets().hashCode() : 0;
-        result = 31 * result + step;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "PlanetSystem{" +
-                "planets=" + planets +
-                ", step=" + step +
-                '}';
-    }
 }
