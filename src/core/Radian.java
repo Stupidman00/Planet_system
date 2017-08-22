@@ -5,9 +5,8 @@ import lombok.Data;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 @Data(staticConstructor = "value")
-public class Radian {
+class Radian {
     private final double value;
-
     static public class RadianAdapter extends XmlAdapter<Double, Radian> {
         @Override
         public Radian unmarshal(Double v) throws Exception {

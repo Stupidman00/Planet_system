@@ -27,7 +27,7 @@ public class AnimatedPlanetSystem {
 //
 //    @NotNull
 //    public static AnimatedPlanetSystem createAnimatedPlanetSystem() {
-//        PlanetSystem ps = PlanetSystem.createPlanetSystem();
+//        PlanetSystem ps = PlanetSystem.create();
 //
 //        Group psg = new Group();
 //        for (Planet p: ps.getPlanets()) {

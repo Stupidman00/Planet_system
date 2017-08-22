@@ -5,9 +5,8 @@ import lombok.Data;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 @Data(staticConstructor = "value")
-public class AU {
+class AU {
     private final double value;
-
     static public class AUAdapter extends XmlAdapter<Double, AU> {
         @Override
         public AU unmarshal(Double v) throws Exception {
